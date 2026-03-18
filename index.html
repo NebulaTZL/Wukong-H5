@@ -18,13 +18,23 @@
   <!-- Open Graph for WeChat sharing preview -->
   <meta property="og:title" content="天命人·悟空传 漫游指南">
   <meta property="og:description" content="我的热爱，由我定义 —— 互动创意H5，带你走进黑神话悟空的壮丽世界">
-  <meta property="og:image" content="assets/title_bg.png">
+  <meta property="og:image" content="assets/title_bg.webp">
   <meta property="og:type" content="website">
   <title>天命人·悟空传 漫游指南</title>
+  <!-- Non-blocking font loading (preconnect + swap) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" style="position:fixed;inset:0;z-index:9999;background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s ease;">
+    <div style="font-family:'Noto Serif SC',serif;font-size:1.5rem;color:#d4a853;letter-spacing:4px;margin-bottom:20px;">天命人·悟空传</div>
+    <div style="width:120px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;"><div id="load-bar" style="height:100%;width:0;background:linear-gradient(90deg,#d4a853,#f0d68a);border-radius:2px;transition:width 0.3s;"></div></div>
+    <div style="margin-top:10px;font-size:0.75rem;color:rgba(255,255,255,0.3);letter-spacing:1px;">正在加载...</div>
+  </div>
   <!-- Music Toggle -->
   <div class="music-toggle" id="musicToggle">
     <div class="music-icon" id="musicIcon">
@@ -47,7 +57,7 @@
 
     <!-- ===== PAGE 0: TITLE ===== -->
     <div class="page active" id="page-title">
-      <div class="page-bg" style="background-image: url('assets/title_bg.png')"></div>
+      <div class="page-bg" style="background-image: url('assets/title_bg.webp')"></div>
       <div class="particles"></div>
       <div class="page-content">
         <div class="title-text">
@@ -61,25 +71,25 @@
 
     <!-- ===== PAGE 1: DIRECTORY ===== -->
     <div class="page" id="page-directory">
-      <div class="page-bg" style="background-image: url('assets/title_bg.png'); filter: blur(6px) brightness(0.4);">
+      <div class="page-bg" style="background-image: url('assets/title_bg.webp'); filter: blur(6px) brightness(0.4);">
       </div>
       <div class="page-content">
         <h2 class="dir-title">⚔ 探索目录</h2>
         <div class="dir-grid">
           <div class="dir-card" id="card1">
-            <img src="assets/card_landscape.png" alt="绝美风景">
+            <img src="assets/card_landscape.webp" alt="绝美风景" loading="lazy">
             <div class="dir-card-label">绝美风景</div>
           </div>
           <div class="dir-card" id="card2">
-            <img src="assets/card_combat.png" alt="战斗机制">
+            <img src="assets/card_combat.webp" alt="战斗机制" loading="lazy">
             <div class="dir-card-label">战斗机制</div>
           </div>
           <div class="dir-card" id="card3">
-            <img src="assets/card_character.png" alt="灵魂角色">
+            <img src="assets/card_character.webp" alt="灵魂角色" loading="lazy">
             <div class="dir-card-label">灵魂角色</div>
           </div>
           <div class="dir-card" id="card4">
-            <img src="assets/card_emotion.png" alt="玩家回音">
+            <img src="assets/card_emotion.webp" alt="玩家回音" loading="lazy">
             <div class="dir-card-label">玩家回音</div>
           </div>
         </div>
@@ -90,7 +100,7 @@
     <!-- ===== PAGE 2: CONTENT 1 - Scenery Slideshow ===== -->
     <div class="page" id="page-scenery">
       <div class="page-bg"
-        style="background-image: url('assets/scene_forest.png'); filter: blur(4px) brightness(0.35);"></div>
+        style="background-image: url('assets/scene_forest.webp'); filter: blur(4px) brightness(0.35);"></div>
       <div class="content-header">
         <span class="content-title">🏔 绝美风景</span>
         <button class="btn-back-small" data-goto="1">返回目录</button>
@@ -98,9 +108,9 @@
       <div class="page-content">
         <div class="slideshow-wrapper">
           <div class="slideshow-track">
-            <img src="assets/scene_forest.png" alt="神秘古林">
-            <img src="assets/scene_snow.png" alt="雪山之巅">
-            <img src="assets/scene_volcano.png" alt="火山炼狱">
+            <img src="assets/scene_forest.webp" alt="神秘古林" loading="lazy">
+            <img src="assets/scene_snow.webp" alt="雪山之巅" loading="lazy">
+            <img src="assets/scene_volcano.webp" alt="火山炼狱" loading="lazy">
           </div>
         </div>
         <div class="slideshow-dots">
@@ -118,7 +128,7 @@
 
     <!-- ===== PAGE 3: CONTENT 2 - Combat / Video ===== -->
     <div class="page" id="page-combat">
-      <div class="page-bg" style="background-image: url('assets/combat_bg.png')"></div>
+      <div class="page-bg" style="background-image: url('assets/combat_bg.webp')"></div>
       <div class="content-header">
         <span class="content-title">⚡ 战斗机制</span>
         <button class="btn-back-small" data-goto="1">返回目录</button>
@@ -140,14 +150,14 @@
 
     <!-- ===== PAGE 4: CONTENT 3 - Character + Audio ===== -->
     <div class="page" id="page-character">
-      <div class="page-bg" style="background-image: url('assets/character_bg.png')"></div>
+      <div class="page-bg" style="background-image: url('assets/character_bg.webp')"></div>
       <div class="content-header">
         <span class="content-title">🐵 灵魂角色</span>
         <button class="btn-back-small" data-goto="1">返回目录</button>
       </div>
       <div class="page-content">
         <div class="character-stage">
-          <img src="assets/character_wukong.png" alt="天命人·悟空">
+          <img src="assets/character_wukong.webp" alt="天命人·悟空" loading="lazy">
         </div>
         <div class="character-hint">
           <div class="audio-wave">
@@ -172,7 +182,7 @@
       </div>
       <div class="page-content">
         <div class="scratch-container">
-          <img class="scratch-bg" src="assets/scratch_reveal.png" alt="通关彩蛋">
+          <img class="scratch-bg" src="assets/scratch_reveal.webp" alt="通关彩蛋" loading="lazy">
           <canvas></canvas>
         </div>
         <p class="scratch-hint">👆 滑动手指擦除迷雾，揭开彩蛋</p>

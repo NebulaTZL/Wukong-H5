@@ -85,7 +85,7 @@
     // Draw fog overlay
     const fogImg = new Image();
     fogImg.crossOrigin = 'anonymous';
-    fogImg.src = 'assets/scratch_fog.png';
+    fogImg.src = 'assets/scratch_fog.webp';
 
     fogImg.onload = function () {
       ctx.globalCompositeOperation = 'source-over';
@@ -209,165 +209,46 @@
     }
   }
 
-  // ---- BGM: Chinese Pentatonic Melody ----
-  let bgmCtx = null;
-  let bgmTimer = null;
-  let bgmGainNode = null;
+  // ---- BGM: MP3 Audio with fallback ----
+  let bgmAudio = null;
 
-  // Chinese pentatonic scale: Do Re Mi Sol La (C D E G A)
-  const MELODY_NOTES = [
-    // 简谱: 敢问路在何方 旋律简化版 (Pentatonic melody inspired by Journey to the West)
-    // Each entry: [frequency, duration_in_beats, volume]
-    [523.25, 1, 0.15],   // C5
-    [587.33, 0.5, 0.12], // D5
-    [659.25, 1.5, 0.15], // E5
-    [783.99, 1, 0.14],   // G5
-    [659.25, 0.5, 0.12], // E5
-    [587.33, 1, 0.13],   // D5
-    [523.25, 2, 0.15],   // C5
-
-    [392.00, 1, 0.14],   // G4
-    [440.00, 0.5, 0.12], // A4
-    [523.25, 1.5, 0.15], // C5
-    [587.33, 1, 0.13],   // D5
-    [523.25, 0.5, 0.12], // C5
-    [440.00, 1, 0.13],   // A4
-    [392.00, 2, 0.14],   // G4
-
-    [523.25, 0.5, 0.13], // C5
-    [587.33, 0.5, 0.12], // D5
-    [659.25, 1, 0.15],   // E5
-    [783.99, 0.5, 0.13], // G5
-    [880.00, 1.5, 0.14], // A5
-    [783.99, 1, 0.13],   // G5
-    [659.25, 0.5, 0.12], // E5
-    [587.33, 2, 0.14],   // D5
-
-    [440.00, 1, 0.13],   // A4
-    [523.25, 0.5, 0.12], // C5
-    [587.33, 1, 0.14],   // D5
-    [523.25, 0.5, 0.12], // C5
-    [440.00, 1, 0.13],   // A4
-    [392.00, 1, 0.14],   // G4
-    [329.63, 2, 0.13],   // E4
-  ];
+  function initBGM() {
+    if (bgmAudio) return;
+    bgmAudio = new Audio();
+    // 默认加载西游记主题曲/轻音乐
+    bgmAudio.src = 'assets/bgm.mp3';
+    bgmAudio.loop = true;
+    bgmAudio.volume = 0.5;
+    
+    // 如果没有找到文件，使用静音避免报错
+    bgmAudio.addEventListener('error', () => {
+      console.warn('bgm.mp3 not found. Place a file named bgm.mp3 in assets/ folder.');
+      isMusicPlaying = false;
+      updateMusicIcon();
+    });
+  }
 
   function startBGM() {
-    if (bgmCtx) return;
-    try {
-      bgmCtx = new (window.AudioContext || window.webkitAudioContext)();
-      bgmGainNode = bgmCtx.createGain();
-      bgmGainNode.gain.value = 0.6;
-      bgmGainNode.connect(bgmCtx.destination);
-
-      // Start ambient pad (soft background)
-      startAmbientPad();
-      // Start melody loop
-      playMelodyLoop();
-
-      isMusicPlaying = true;
-      updateMusicIcon();
-    } catch (e) {
-      console.warn('BGM init failed:', e);
+    if (!bgmAudio) initBGM();
+    
+    const playPromise = bgmAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        isMusicPlaying = true;
+        updateMusicIcon();
+        // 如果页面隐藏，暂停播放
+        if (document.hidden) stopBGM();
+      }).catch(err => {
+        console.log('BGM auto-play prevented by browser:', err);
+        isMusicPlaying = false;
+        updateMusicIcon();
+      });
     }
   }
 
-  function startAmbientPad() {
-    if (!bgmCtx) return;
-    // Soft ambient drone on C and G
-    [130.81, 196.00, 261.63].forEach(freq => {
-      const osc = bgmCtx.createOscillator();
-      const gain = bgmCtx.createGain();
-      const filter = bgmCtx.createBiquadFilter();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      filter.type = 'lowpass';
-      filter.frequency.value = 600;
-      gain.gain.value = 0.02;
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(bgmGainNode);
-      osc.start();
-
-      // Gentle LFO
-      const lfo = bgmCtx.createOscillator();
-      const lfoGain = bgmCtx.createGain();
-      lfo.frequency.value = 0.08 + Math.random() * 0.1;
-      lfoGain.gain.value = freq * 0.008;
-      lfo.connect(lfoGain);
-      lfoGain.connect(osc.frequency);
-      lfo.start();
-    });
-  }
-
-  function playMelodyLoop() {
-    if (!bgmCtx || !isMusicPlaying) return;
-
-    const beatDuration = 0.35; // seconds per beat
-    let time = bgmCtx.currentTime + 0.1;
-
-    MELODY_NOTES.forEach(([freq, beats, vol]) => {
-      const dur = beats * beatDuration;
-
-      // Main tone (triangle for softer Chinese instrument sound)
-      const osc = bgmCtx.createOscillator();
-      const gain = bgmCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0, time);
-      gain.gain.linearRampToValueAtTime(vol, time + 0.03);
-      gain.gain.setValueAtTime(vol, time + dur * 0.7);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
-      osc.connect(gain);
-      gain.connect(bgmGainNode);
-      osc.start(time);
-      osc.stop(time + dur + 0.05);
-
-      // Subtle harmonic (one octave higher, very quiet)
-      const osc2 = bgmCtx.createOscillator();
-      const gain2 = bgmCtx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.value = freq * 2;
-      gain2.gain.setValueAtTime(0, time);
-      gain2.gain.linearRampToValueAtTime(vol * 0.15, time + 0.05);
-      gain2.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.5);
-      osc2.connect(gain2);
-      gain2.connect(bgmGainNode);
-      osc2.start(time);
-      osc2.stop(time + dur);
-
-      time += dur;
-    });
-
-    // Total duration of one loop
-    const totalBeats = MELODY_NOTES.reduce((s, n) => s + n[1], 0);
-    const loopDuration = totalBeats * beatDuration;
-
-    // Schedule next loop with a pause
-    bgmTimer = setTimeout(() => {
-      playMelodyLoop();
-    }, (loopDuration + 1.5) * 1000);
-  }
-
-  function playMelodyNote(freq, dur) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-    gain.gain.value = 0.1;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    setTimeout(() => { osc.stop(); ctx.close(); }, dur * 1000);
-  }
-
   function stopBGM() {
-    if (bgmTimer) { clearTimeout(bgmTimer); bgmTimer = null; }
-    if (bgmCtx) {
-      try { bgmCtx.close(); } catch (e) { }
-      bgmCtx = null;
-      bgmGainNode = null;
+    if (bgmAudio) {
+      bgmAudio.pause();
     }
     isMusicPlaying = false;
     updateMusicIcon();
@@ -530,6 +411,42 @@
         bgmStarted = false;
       }
     });
+
+    // Loading screen: preload only title bg, then dismiss
+    dismissLoadingScreen();
+  }
+
+  function dismissLoadingScreen() {
+    const loadScreen = document.getElementById('loading-screen');
+    const loadBar = document.getElementById('load-bar');
+    if (!loadScreen) return;
+
+    // Animate progress bar
+    let progress = 0;
+    const tick = setInterval(() => {
+      progress = Math.min(progress + 8 + Math.random() * 12, 90);
+      if (loadBar) loadBar.style.width = progress + '%';
+    }, 100);
+
+    // Preload just the title background (critical for first page)
+    const img = new Image();
+    img.src = 'assets/title_bg.webp';
+
+    function finish() {
+      clearInterval(tick);
+      if (loadBar) loadBar.style.width = '100%';
+      setTimeout(() => {
+        loadScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadScreen.style.display = 'none';
+        }, 600);
+      }, 200);
+    }
+
+    img.onload = finish;
+    img.onerror = finish;
+    // Fallback: dismiss after 3s max even if image fails
+    setTimeout(finish, 3000);
   }
 
   if (document.readyState === 'loading') {
