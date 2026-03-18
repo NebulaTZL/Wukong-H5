@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="天命人·悟空传漫游指南 - 互动创意H5作品，带你走进黑神话悟空的壮丽世界">
+  <!-- WeChat / Mobile compatibility -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="x5-orientation" content="portrait">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="screen-orientation" content="portrait">
+  <meta name="full-screen" content="yes">
+  <!-- Open Graph for WeChat sharing preview -->
+  <meta property="og:title" content="天命人·悟空传 漫游指南">
+  <meta property="og:description" content="我的热爱，由我定义 —— 互动创意H5，带你走进黑神话悟空的壮丽世界">
+  <meta property="og:image" content="assets/title_bg.png">
+  <meta property="og:type" content="website">
+  <title>天命人·悟空传 漫游指南</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Music Toggle -->
+  <div class="music-toggle" id="musicToggle">
+    <div class="music-icon" id="musicIcon">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Page Indicator -->
+  <div class="page-indicator">
+    <div class="page-indicator-dot active"></div>
+    <div class="page-indicator-dot"></div>
+    <div class="page-indicator-dot"></div>
+    <div class="page-indicator-dot"></div>
+    <div class="page-indicator-dot"></div>
+    <div class="page-indicator-dot"></div>
+  </div>
+  <div class="swipe-hint">↕ 上下滑动翻页</div>
+
+  <div class="h5-container">
+
+    <!-- ===== PAGE 0: TITLE ===== -->
+    <div class="page active" id="page-title">
+      <div class="page-bg" style="background-image: url('assets/title_bg.png')"></div>
+      <div class="particles"></div>
+      <div class="page-content">
+        <div class="title-text">
+          <h1 class="title-main">天命人<br>悟空传</h1>
+          <div class="title-divider"></div>
+          <p class="title-sub">—— 漫游指南 ——</p>
+        </div>
+        <button class="btn-start" id="btnStart">开 始 探 索</button>
+      </div>
+    </div>
+
+    <!-- ===== PAGE 1: DIRECTORY ===== -->
+    <div class="page" id="page-directory">
+      <div class="page-bg" style="background-image: url('assets/title_bg.png'); filter: blur(6px) brightness(0.4);">
+      </div>
+      <div class="page-content">
+        <h2 class="dir-title">⚔ 探索目录</h2>
+        <div class="dir-grid">
+          <div class="dir-card" id="card1">
+            <img src="assets/card_landscape.png" alt="绝美风景">
+            <div class="dir-card-label">绝美风景</div>
+          </div>
+          <div class="dir-card" id="card2">
+            <img src="assets/card_combat.png" alt="战斗机制">
+            <div class="dir-card-label">战斗机制</div>
+          </div>
+          <div class="dir-card" id="card3">
+            <img src="assets/card_character.png" alt="灵魂角色">
+            <div class="dir-card-label">灵魂角色</div>
+          </div>
+          <div class="dir-card" id="card4">
+            <img src="assets/card_emotion.png" alt="玩家回音">
+            <div class="dir-card-label">玩家回音</div>
+          </div>
+        </div>
+        <button class="btn-back" data-goto="0">← 返回首页</button>
+      </div>
+    </div>
+
+    <!-- ===== PAGE 2: CONTENT 1 - Scenery Slideshow ===== -->
+    <div class="page" id="page-scenery">
+      <div class="page-bg"
+        style="background-image: url('assets/scene_forest.png'); filter: blur(4px) brightness(0.35);"></div>
+      <div class="content-header">
+        <span class="content-title">🏔 绝美风景</span>
+        <button class="btn-back-small" data-goto="1">返回目录</button>
+      </div>
+      <div class="page-content">
+        <div class="slideshow-wrapper">
+          <div class="slideshow-track">
+            <img src="assets/scene_forest.png" alt="神秘古林">
+            <img src="assets/scene_snow.png" alt="雪山之巅">
+            <img src="assets/scene_volcano.png" alt="火山炼狱">
+          </div>
+        </div>
+        <div class="slideshow-dots">
+          <div class="slideshow-dot active"></div>
+          <div class="slideshow-dot"></div>
+          <div class="slideshow-dot"></div>
+        </div>
+        <p class="content-desc">
+          "从古林的晨曦薄雾，到雪山之巅的寒风凛冽，<br>
+          再到火山深处的熔岩余晖……<br>
+          每一帧，都是国风美学的极致。"
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== PAGE 3: CONTENT 2 - Combat / Video ===== -->
+    <div class="page" id="page-combat">
+      <div class="page-bg" style="background-image: url('assets/combat_bg.png')"></div>
+      <div class="content-header">
+        <span class="content-title">⚡ 战斗机制</span>
+        <button class="btn-back-small" data-goto="1">返回目录</button>
+      </div>
+      <div class="page-content">
+        <div class="video-frame">
+          <div class="video-placeholder">
+            <div class="play-icon"></div>
+            <p class="video-hint">点击播放战斗演示</p>
+          </div>
+        </div>
+        <p class="content-desc">
+          "七十二变，法天象地，<br>
+          棍棒翻飞间，天命难违亦要违！<br>
+          万物皆可交互，你的想象力是唯一的武器。"
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== PAGE 4: CONTENT 3 - Character + Audio ===== -->
+    <div class="page" id="page-character">
+      <div class="page-bg" style="background-image: url('assets/character_bg.png')"></div>
+      <div class="content-header">
+        <span class="content-title">🐵 灵魂角色</span>
+        <button class="btn-back-small" data-goto="1">返回目录</button>
+      </div>
+      <div class="page-content">
+        <div class="character-stage">
+          <img src="assets/character_wukong.png" alt="天命人·悟空">
+        </div>
+        <div class="character-hint">
+          <div class="audio-wave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          点击角色，聆听他的故事
+        </div>
+        <p class="content-desc">
+          "踏上取经路，直面天命！<br>
+          这不仅是一款游戏，<br>
+          更是属于我们这一代人的西游梦。"
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== PAGE 5: CONTENT 4 - Scratch to Reveal ===== -->
+    <div class="page" id="page-scratch">
+      <div class="page-bg" style="background: linear-gradient(180deg, #1a0e05 0%, #0f0a15 100%);"></div>
+      <div class="content-header">
+        <span class="content-title">🔥 玩家回音</span>
+        <button class="btn-back-small" data-goto="1">返回目录</button>
+      </div>
+      <div class="page-content">
+        <div class="scratch-container">
+          <img class="scratch-bg" src="assets/scratch_reveal.png" alt="通关彩蛋">
+          <canvas></canvas>
+        </div>
+        <p class="scratch-hint">👆 滑动手指擦除迷雾，揭开彩蛋</p>
+        <div class="scratch-progress">
+          <div class="scratch-progress-bar"></div>
+        </div>
+        <p class="content-desc">
+          "真正的游戏，<br>
+          是让你在虚拟世界中找到了真实的感动。"
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
